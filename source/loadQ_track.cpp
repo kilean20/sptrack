@@ -322,7 +322,7 @@ int main(int argc, char *argv[])
 						xold=x[i*8+0];
 						zold=x[i*8+2];
 						if (FODO.Cell[k]->NAME==string("SPKICK")){
-							Fsc2(Ksc1[j],3.0,sx2,sz2,xold,zold,fscx,fscz);
+                                                        Fsc2(Ksc1[j],0.5,sx2,sz2,xold,zold,fscx,fscz);
 						}
 						x[i*8+1]+=fscx;
 						x[i*8+3]+=fscz;
