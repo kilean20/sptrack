@@ -162,8 +162,6 @@ int main(int argc, char *argv[])
         x[i*8+4] = 0;
         x[i*8+5] = 0;
     }
-
-
     for (unsigned int i=0; i < N_particle; i++) {
         x[i*8+1] = (x[i*8+6]-alfax0*x[i*8+0])/betax0;
         x[i*8+3] = (x[i*8+7]-alfaz0*x[i*8+2])/betaz0;
@@ -221,7 +219,7 @@ int main(int argc, char *argv[])
     for (unsigned int i=0; i<6; i++) {
         for (unsigned int j=0; j <12; j++) {
             phix=2.0*j*PI/12.0;
-            Ax=sqrt(betax0*epsx)*0.5*(i+1);
+            Ax=sqrt(betax0*epsx*0.5*(i+1));
             test_x[(i*12+j)*8+0] = Ax*cos(phix);
             test_x[(i*12+j)*8+6] = Ax*sin(phix); //Px
             test_x[(i*12+j)*8+1] = (test_x[(i*12+j)*8+6]-alfax0*test_x[(i*12+j)*8+0])/betax0;
@@ -229,7 +227,6 @@ int main(int argc, char *argv[])
             test_x[(i*12+j)*8+3] = 0;
             test_x[(i*12+j)*8+4] = 0;
             test_x[(i*12+j)*8+5] = 0;
-	cout << i <<"th action of test p" << endl;
         }
     }
 
@@ -258,10 +255,10 @@ int main(int argc, char *argv[])
             fout1<<j<<" "<<count<<" "<<sigx2(0)<<" "<<sigxp2(0)<<" "<<sigz2(0)<<" "<<sigzp2(0)<<" "<<e1(0)<<" "<<e2(0)<<" "<<sigxp(0)<<" "<<sigzp(0)<<" "<<endl; //add (0) to avoid newline
         }
         if(fout2.is_open()){
-//            for (int i=0; i < N_particle; i++) {
-//                x[i*8+6] = betax0*x[i*8+1]+alfax0*x[i*8+0];
-//                x[i*8+7] = betaz0*x[i*8+3]+alfaz0*x[i*8+2];
-//            }
+            for (int i=0; i < N_particle; i++) {
+                x[i*8+6] = betax0*x[i*8+1]+alfax0*x[i*8+0];
+                x[i*8+7] = betaz0*x[i*8+3]+alfaz0*x[i*8+2];
+            }
             for (unsigned int i=0; i < 72; i++) {
                 fout2<<test_x[i*8+0]<<" "<<test_x[i*8+1]<<endl;
             }
@@ -341,7 +338,7 @@ int main(int argc, char *argv[])
                 //smoothize the emittance by the past 108 space charge kickers
                 sx2=betax*aveg_e1;//sx2=sigx2(0);
                 sz2=betaz*aveg_e2;//sz2=sigz2(0);
-
+                //SC kick
                 for (unsigned int i=0; i < N_particle; i++) { //for every particles
                     if(stable[i]!=0){
                         xold=x[i*8+0];
@@ -353,18 +350,15 @@ int main(int argc, char *argv[])
                         x[i*8+3]+=fscz;
                     }
                 }
-                //test particle
+                //test particle SC kick
                 for (unsigned int i=0; i < 72; i++) { //for every test particles
-                    if(stable[i]!=0){
                         xold=test_x[i*8+0];
                         zold=test_x[i*8+2];
                         if (FODO.Cell[k]->NAME==string("SPKICK")){
                             Fsc2(Ksc1[j],0.5,sx2,sz2,xold,zold,fscx,fscz);
                         }
                         test_x[i*8+1]+=fscx;
-                        test_x[i*8+3]+=fscz;
-                    }
-		    if(j%100==1) cout << "testParticle "<< j <<"turn" << endl;
+                        test_x[i*8+3]+=fscz; 
                 }
 
                 if(fout4.is_open()){
