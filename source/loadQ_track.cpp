@@ -219,7 +219,7 @@ int main(int argc, char *argv[])
     for (unsigned int i=0; i<6; i++) {
         for (unsigned int j=0; j <12; j++) {
             phix=2.0*j*PI/12.0;
-            Ax=sqrt(betax0*epsx*0.5*(i+1));
+            Ax=sqrt(betax0*epsx*0.2*(i+1));
             test_x[(i*12+j)*8+0] = Ax*cos(phix);
             test_x[(i*12+j)*8+6] = Ax*sin(phix); //Px
             test_x[(i*12+j)*8+1] = (test_x[(i*12+j)*8+6]-alfax0*test_x[(i*12+j)*8+0])/betax0;
