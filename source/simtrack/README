@@ -1,0 +1,25 @@
+Starting from simtrack.h, what I have done are:
+* Split into 5 cpps w/ associated header files, plus global.h
+* According to the dependencies, write a Makefile to make 5 objectives
+* Archive all objectives into libsimtrack32.a or libsimtrack64.a, depending on the OS bits
+* Remove template of LRBB_Pass, change to only double
+* Interface to MADX skipped
+* Print_GlobalVariables function disabled.
+* Using "const double" in global.h instead of only double.
+* Use external GlobalVariables GP in header files
+* Replace PI to M_PI, include <cmath>
+* Add explicit instantiation of template at the end of elepass.cpp
+* Change random number generator function "rnd"
+* To use this library, check test1.cpp, which call FODO.cpp
+* Use long integer for factor function "fac" in ACMULT_Pass, multi_kick_pass, and bend_multi_kick_pass
+* change BEAMBEAM_Pass, ELENS_Pass from template to double
+
+
+What we may need:
+* GUI
+* matching
+* integrate to math algorithms
+* better object oriented programming
+* more complete math functions
+* classes for bunch, beam
+* seperate global.h from library

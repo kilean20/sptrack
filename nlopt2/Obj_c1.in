@@ -1,0 +1,14 @@
+#harmonics to calculate
+1 2 3 4 5 6 7 8 9 10
+
+#weighting of harmonics
+0 0 0 1 1 0 0 0 0 0
+0 0 0 10 1 0 0 0 0 0
+
+#weighting of tunes
+1 1
+
+#weighting in beta functions at BPMs
+0
+#weighting in phases at BPMs
+0

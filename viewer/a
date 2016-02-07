@@ -1,0 +1,55 @@
+		wxString cFile = "shopping_list2.txt";
+		wxArrayString sList = ReadFile(cFile);
+		m_addressList = new wxListBox(this, wxID_ANY); 
+		m_addressList->Bind(wxEVT_COMMAND_LISTBOX_SELECTED, &MyFrame::OnListChanged, this);
+		//fill the control 
+		for(int idx=0; idx<sList.GetCount(); idx++)
+		{
+			//take first line only 
+			wxString fullName = sList[idx].BeforeFirst('\n');
+			if(!fullName.IsEmpty())
+			{ 
+				PhoneBookData* data = new PhoneBookData(sList[idx]);  
+				//write value to list box and catch index
+				int idx2 = m_addressList->Append(fullName); 
+				m_addressList->SetClientData(idx2, data); 
+			}
+		}
+
+		void OnListChanged(wxCommandEvent& e)
+		{
+			//get index of selected
+			int idx = m_addressList->GetSelection();
+			//get data of selected item 
+			PhoneBookData* data =(PhoneBookData*)m_addressList->GetClientData(idx); 
+			if(data)
+			{
+				wxString item = data->GetData(); 
+				m_addressDisplay->Clear();
+				m_addressDisplay->WriteText(item); 
+			}
+		}
+	private:
+		const wxArrayString ReadFile(const wxString& filename)
+		{
+			wxTextFile file;
+			file.Open(filename);
+			wxArrayString array;
+
+			if(file.IsOpened())
+			{ 
+				for (wxString str = file.GetFirstLine(); !file.Eof(); str = file.GetNextLine() )
+				{
+					//replace all | lines with new line 
+					str.Replace( "|", "\n");  
+					array.Add(str);
+				}
+
+			}
+			else
+			{
+				//failed to open! we do nothing for now!
+			}
+
+			return array;
+		}
