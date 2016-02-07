@@ -239,10 +239,13 @@ int main(int argc, char *argv[])
 		if(fout2.is_open()){
 			for (int i=0; i < N_particle; i++) {
 				x[i*8+6] = betax0*x[i*8+1]+alfax0*x[i*8+0];
-				x[i*8+7] = betaz0*x[i*8+3]+alfaz0*x[i*8+2];
+				x[i*8+7] = betaz0*x[i*8+3]+alfaz0*x[i*8+2];                                
 			}
-			fout2<<"#n="<<j<<'F'<<endl;
-			fout2<<trans(X.cols(live_index))<<endl<<endl;
+                        for (int i=0; i < 100; i++) {
+                            fout2<<x[i*8+6]<<" "<<x[i*8+7]<<endl;
+                        }
+//			fout2<<"#n="<<j<<'F'<<endl;
+//			fout2<<trans(X.cols(live_index))<<endl<<endl;
 		}
 		if(fout3.is_open()){
 			fout3<<j<<" "<<STABLE.t();
