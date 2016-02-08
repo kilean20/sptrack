@@ -214,12 +214,11 @@ int main(int argc, char *argv[])
 
 
     // test particles for poincare surface
-    double *test_x = new double[72*8];
-    //double test_x[72*8];
-    for (unsigned int i=0; i<6; i++) {
+    double *test_x = new double[120*8];
+    for (unsigned int i=0; i<10; i++) {
         for (unsigned int j=0; j <12; j++) {
             phix=2.0*j*PI/12.0;
-            Ax=sqrt(betax0*epsx*0.2*(i+1));
+            Ax=sqrt(betax0*epsx*0.25*(i+1));
             test_x[(i*12+j)*8+0] = Ax*cos(phix);
             test_x[(i*12+j)*8+6] = Ax*sin(phix); //Px
             test_x[(i*12+j)*8+1] = (test_x[(i*12+j)*8+6]-alfax0*test_x[(i*12+j)*8+0])/betax0;
@@ -255,12 +254,12 @@ int main(int argc, char *argv[])
             fout1<<j<<" "<<count<<" "<<sigx2(0)<<" "<<sigxp2(0)<<" "<<sigz2(0)<<" "<<sigzp2(0)<<" "<<e1(0)<<" "<<e2(0)<<" "<<sigxp(0)<<" "<<sigzp(0)<<" "<<endl; //add (0) to avoid newline
         }
         if(fout2.is_open()){
-            for (int i=0; i < N_particle; i++) {
-                x[i*8+6] = betax0*x[i*8+1]+alfax0*x[i*8+0];
-                x[i*8+7] = betaz0*x[i*8+3]+alfaz0*x[i*8+2];
+            for (int i=0; i < 120; i++) {
+                test_x[i*8+6] = betax0*test_x[i*8+1]+alfax0*test_x[i*8+0];
+                test_x[i*8+7] = betaz0*test_x[i*8+3]+alfaz0*test_x[i*8+2];
             }
-            for (unsigned int i=0; i < 72; i++) {
-                fout2<<test_x[i*8+0]<<" "<<test_x[i*8+1]<<endl;
+            for (unsigned int i=0; i < 120; i++) {
+                fout2<<test_x[i*8+0]<<" "<<test_x[i*8+6]<<endl;
             }
             //			fout2<<"#n="<<j<<'F'<<endl;
             //			fout2<<trans(X.cols(live_index))<<endl<<endl;
@@ -273,7 +272,7 @@ int main(int argc, char *argv[])
         count=0;	//counting number of survival particles
         countk=0;	//count sp_kickers number, for writing envelope at every six sp_kickers
         for(unsigned int k=0;k<FODO.Ncell;k++) { //for every element in one turn
-            for (unsigned int i=0; i < 72; i++) { FODO.Cell[k]->Pass(test_x+i*8);} // test
+            for (unsigned int i=0; i < 120; i++) { FODO.Cell[k]->Pass(test_x+i*8);} // test
             for (unsigned int i=0; i < N_particle; i++) { //for every particles
                 if(stable[i]!=0){
                     FODO.Cell[k]->Pass(x+i*8);
@@ -351,7 +350,7 @@ int main(int argc, char *argv[])
                     }
                 }
                 //test particle SC kick
-                for (unsigned int i=0; i < 72; i++) { //for every test particles
+                for (unsigned int i=0; i < 120; i++) { //for every test particles
                         xold=test_x[i*8+0];
                         zold=test_x[i*8+2];
                         if (FODO.Cell[k]->NAME==string("SPKICK")){
