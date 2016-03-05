@@ -215,19 +215,26 @@ int main(int argc, char *argv[])
 
 
     // test particles for poincare surface
-    double *test_x = new double[200*8];
-    for (unsigned int i=0; i<20; i++) {
-        for (unsigned int j=0; j <10; j++) {
-            phix=2.0*j*PI/10.0;
+    const int Ntest_action=20, Ntest_Angle=10, Ntest=Ntest_action*Ntest_Angle;
+    mat test_Xbar=zeros(8,Ntest);
+    double *test_x = new double[Ntest*8];
+    for (unsigned int i=0; i<Ntest_action; i++) {
+        for (unsigned int j=0; j <Ntest_Angle; j++) {
+            phix=2.0*j*PI/(double)Ntest_Angle;
             Ax=sqrt(betax0*epsx)*0.15*(i+1);
-            test_x[(i*10+j)*8+0] = Ax*cos(phix);
-            test_x[(i*10+j)*8+6] = Ax*sin(phix); //Px
-            test_x[(i*10+j)*8+1] = (test_x[(i*10+j)*8+6]-alfax0*test_x[(i*10+j)*8+0])/betax0;
-            test_x[(i*10+j)*8+2] = 0;
-            test_x[(i*10+j)*8+3] = 0;
-            test_x[(i*10+j)*8+4] = 0;
+            test_x[(i*Ntest_Angle+j)*8+0] = Ax*cos(phix);
+            test_x[(i*Ntest_Angle+j)*8+6] = Ax*sin(phix); //Px
+            test_x[(i*Ntest_Angle+j)*8+1] = (test_x[(i*Ntest_Angle+j)*8+6]-alfax0*test_x[(i*Ntest_Angle+j)*8+0])/betax0;
+            test_x[(i*Ntest_Angle+j)*8+2] = 0;
+            test_x[(i*Ntest_Angle+j)*8+3] = 0;
+            test_x[(i*Ntest_Angle+j)*8+4] = 0;
         }
     }
+    test_Xbar.row(0)=mean(X.row(0))*ones(1,Ntest);
+    test_Xbar.row(1)=mean(X.row(1))*ones(1,Ntest);
+    test_Xbar.row(2)=mean(X.row(2))*ones(1,Ntest);
+    test_Xbar.row(3)=mean(X.row(3))*ones(1,Ntest);
+    test_x=test_x-test_Xbar;
 
 
     //Main Loop
@@ -273,7 +280,7 @@ int main(int argc, char *argv[])
         count=0;	//counting number of survival particles
         countk=0;	//count sp_kickers number, for writing envelope at every six sp_kickers
         for(unsigned int k=0;k<FODO.Ncell;k++) { //for every element in one turn
-            for (unsigned int i=0; i < 200; i++) { FODO.Cell[k]->Pass(test_x+i*8);} // test
+            for (unsigned int i=0; i < Ntest; i++) { FODO.Cell[k]->Pass(test_x+i*8);} // test
             for (unsigned int i=0; i < N_particle; i++) { //for every particles
                 if(stable[i]!=0){
                     FODO.Cell[k]->Pass(x+i*8);
@@ -351,7 +358,12 @@ int main(int argc, char *argv[])
                     }
                 }
                 //test particle SC kick
-                for (unsigned int i=0; i < 200; i++) { //for every test particles
+                test_Xbar.row(0)=mean(X.row(0))*ones(1,Ntest);
+                test_Xbar.row(1)=mean(X.row(1))*ones(1,Ntest);
+                test_Xbar.row(2)=mean(X.row(2))*ones(1,Ntest);
+                test_Xbar.row(3)=mean(X.row(3))*ones(1,Ntest);
+                test_x=test_x-test_Xbar;
+                for (unsigned int i=0; i < Ntest; i++) { //for every test particles
                         xold=test_x[i*8+0];
                         zold=test_x[i*8+2];
                         if (FODO.Cell[k]->NAME==string("SPKICK")){
