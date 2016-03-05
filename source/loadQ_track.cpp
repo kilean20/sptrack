@@ -218,6 +218,7 @@ int main(int argc, char *argv[])
     const int Ntest_action=20, Ntest_Angle=10, Ntest=Ntest_action*Ntest_Angle;
     mat test_Xbar=zeros(8,Ntest);
     double *test_x = new double[Ntest*8];
+    mat test_X(test_x, 8, Ntest, false);
     for (unsigned int i=0; i<Ntest_action; i++) {
         for (unsigned int j=0; j <Ntest_Angle; j++) {
             phix=2.0*j*PI/(double)Ntest_Angle;
@@ -234,7 +235,7 @@ int main(int argc, char *argv[])
     test_Xbar.row(1)=mean(X.row(1))*ones(1,Ntest);
     test_Xbar.row(2)=mean(X.row(2))*ones(1,Ntest);
     test_Xbar.row(3)=mean(X.row(3))*ones(1,Ntest);
-    test_x=test_x-test_Xbar;
+    test_X=test_X-test_Xbar;
 
 
     //Main Loop
@@ -265,7 +266,7 @@ int main(int argc, char *argv[])
                 test_x[i*8+6] = betax0*test_x[i*8+1]+alfax0*test_x[i*8+0];
                 test_x[i*8+7] = betaz0*test_x[i*8+3]+alfaz0*test_x[i*8+2];
             }
-            for (unsigned int i=0; i < 200; i++) {
+            for (unsigned int i=0; i < Ntest; i++) {
 		if(j>50)
                 fout2<<test_x[i*8+0]<<" "<<test_x[i*8+1]<<" "<<test_x[i*8+6]<<endl;
             }
@@ -362,7 +363,7 @@ int main(int argc, char *argv[])
                 test_Xbar.row(1)=mean(X.row(1))*ones(1,Ntest);
                 test_Xbar.row(2)=mean(X.row(2))*ones(1,Ntest);
                 test_Xbar.row(3)=mean(X.row(3))*ones(1,Ntest);
-                test_x=test_x-test_Xbar;
+                test_X=test_X-test_Xbar;
                 for (unsigned int i=0; i < Ntest; i++) { //for every test particles
                         xold=test_x[i*8+0];
                         zold=test_x[i*8+2];
