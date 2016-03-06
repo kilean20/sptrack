@@ -166,7 +166,7 @@ int main(int argc, char *argv[])
     int dummyAx=1, dummyPhi=0;
     for (unsigned int i=0; i < 100; i++) {
         if(dummyPhi%2==1){dummyAx++;}
-        phix=M_PI*(double)dymmyPhi;
+        phix=M_PI*(double)dummyPhi;
         Ax=sqrt(betax0*epsx)*0.1*dummyAx;
         x[i*8+0] = Ax*cos(phix);
         x[i*8+6] = Ax*sin(phix); //Px
