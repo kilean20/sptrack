@@ -99,7 +99,7 @@ int main(int argc, char *argv[])
     line_def(FODO);
     //need these for paticle initialization
     //load_2Q(FODO,Qsetting0);
-    Fit_Tune(FODO, 122.0/360.0, 0.32, "QF", "QD");
+    //Fit_Tune(FODO, 122.0/360.0, 0.32, "QF", "QD");
     Cal_Twiss(FODO,0.0);//it is necessary for the 0th turn
     double betax0, betaz0, alfax0, alfaz0;
     betax0 = FODO.Cell[0]->Beta1;
@@ -352,7 +352,7 @@ int main(int argc, char *argv[])
                         xold=x[i*8+0];
                         zold=x[i*8+2];
                         if (FODO.Cell[k]->NAME==string("SPKICK")){
-                            Fsc2(Ksc1[j],0.5,sx2,sz2,xold,zold,fscx,fscz);
+                            Fsc2(Ksc1[j],1.0,sx2,sz2,xold,zold,fscx,fscz);
                         }
                         x[i*8+1]+=fscx;
                         x[i*8+3]+=fscz;
@@ -368,7 +368,7 @@ int main(int argc, char *argv[])
                         xold=test_x[i*8+0];
                         zold=test_x[i*8+2];
                         if (FODO.Cell[k]->NAME==string("SPKICK")){
-                            Fsc2(Ksc1[j],0.5,sx2,sz2,xold,zold,fscx,fscz);
+                            Fsc2(Ksc1[j],1.0,sx2,sz2,xold,zold,fscx,fscz);
                         }
                         test_x[i*8+1]+=fscx;
                         test_x[i*8+3]+=fscz; 
