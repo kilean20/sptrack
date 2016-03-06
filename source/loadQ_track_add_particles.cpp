@@ -151,7 +151,7 @@ int main(int argc, char *argv[])
     unsigned int *lost_turn = new unsigned int[N_particle];
     unsigned int *lost_post = new unsigned int[N_particle];
     double phix,phiz,Ax,Az;
-    for (unsigned int i=0; i < N_particle-100; i++) {
+    for (unsigned int i=100; i < N_particle; i++) {
         phix=unifRand(-M_PI,M_PI);
         Ax=sqrt(betax0*epsx)*trunc_xgaussRand(4);
         x[i*8+0] = Ax*cos(phix);
@@ -163,11 +163,11 @@ int main(int argc, char *argv[])
         x[i*8+4] = 0;
         x[i*8+5] = 0;
     }
-    int dummyAx=1, dummyPhi=1;
-    for (unsigned int i=100; i < N_particle; i++) {
-        if(dummyPhi==4){dummyAx++; dummyPhi=-5;}
-        phix=M_PI*(double)dymmplyPhi/10.0;
-        Ax=sqrt(betax0*epsx)*0.5*dummyAx;
+    int dummyAx=1, dummyPhi=0;
+    for (unsigned int i=0; i < 100; i++) {
+        if(dummyPhi%2==1){dummyAx++;}
+        phix=M_PI*(double)dummyPhi;
+        Ax=sqrt(betax0*epsx)*0.1*dummyAx;
         x[i*8+0] = Ax*cos(phix);
         x[i*8+6] = Ax*sin(phix); //Px
         phiz=unifRand(-M_PI,M_PI);
@@ -176,7 +176,7 @@ int main(int argc, char *argv[])
         x[i*8+7] = Az*sin(phiz); //Pz
         x[i*8+4] = 0;
         x[i*8+5] = 0;
-        dummyPhi++
+        dummyPhi++;
     }
     for (unsigned int i=0; i < N_particle; i++) {
         x[i*8+1] = (x[i*8+6]-alfax0*x[i*8+0])/betax0;
@@ -342,7 +342,7 @@ int main(int argc, char *argv[])
                         xold=x[i*8+0];
                         zold=x[i*8+2];
                         if (FODO.Cell[k]->NAME==string("SPKICK")){
-                            Fsc2(Ksc1[j],0.5,sx2,sz2,xold,zold,fscx,fscz);
+                            Fsc2(Ksc1[j],1.0,sx2,sz2,xold,zold,fscx,fscz);
                         }
                         x[i*8+1]+=fscx;
                         x[i*8+3]+=fscz;
