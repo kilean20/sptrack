@@ -167,7 +167,7 @@ int main(int argc, char *argv[])
     for (unsigned int i=100; i < N_particle; i++) {
         if(dummyPhi==1){dummyAx++; dummyPhi=0;}
         phix=M_PI*(double)dymmyPhi;
-        Ax=sqrt(betax0*epsx)*0.1*dummyAx;
+        Ax=sqrt(betax0*epsx)*0.02*dummyAx;
         x[i*8+0] = Ax*cos(phix);
         x[i*8+6] = Ax*sin(phix); //Px
         phiz=unifRand(-M_PI,M_PI);
