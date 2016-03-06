@@ -10,8 +10,8 @@ void line_def(Line & FODO)
     Element * temp;
     temp = new MARKER("START",0);
     FODO.Append(temp);
-    for(int i=0;i<5;i++){
-        temp = new DRIFT("D1", 0.5*ld);
+    for(int i=0;i<10;i++){
+        temp = new DRIFT("D0", 0.5*ld);
         FODO.Append(temp);
         temp = new  QUAD("QF", 0.5*lq, 1.00428);
         FODO.Append(temp);
@@ -19,7 +19,11 @@ void line_def(Line & FODO)
         FODO.Append(temp);
         temp = new  QUAD("QF", 0.5*lq, 1.00428);
         FODO.Append(temp);
-        temp = new DRIFT("D0", ld);
+        temp = new DRIFT("D0", 0.5*ld);
+        FODO.Append(temp);
+        temp = new  MARKER("SPKICK",0);
+        FODO.Append(temp);
+        temp = new DRIFT("D0", 0.5*ld);
         FODO.Append(temp);
         temp = new  QUAD("QD", 0.5*lq, -0.837118);
         FODO.Append(temp);
@@ -27,7 +31,9 @@ void line_def(Line & FODO)
         FODO.Append(temp);
         temp = new  QUAD("QD", 0.5*lq, -0.837118);
         FODO.Append(temp);
-        temp = new DRIFT("D1", 0.5*ld);
+        temp = new DRIFT("D0", 0.5*ld);
+        FODO.Append(temp);
+        temp = new  MARKER("SPKICK",0);
         FODO.Append(temp);
     }
     temp = new MARKER("END",0);
