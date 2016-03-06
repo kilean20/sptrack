@@ -215,7 +215,7 @@ int main(int argc, char *argv[])
 
 
     // test particles for poincare surface
-    const int Ntest_action=20, Ntest_Angle=10, Ntest=Ntest_action*Ntest_Angle;
+    const int Ntest_action=40, Ntest_Angle=2, Ntest=Ntest_action*Ntest_Angle;
     mat test_Xbar=zeros(8,Ntest);
     double *test_x = new double[Ntest*8];
     mat test_X(test_x, 8, Ntest, false);
@@ -231,11 +231,11 @@ int main(int argc, char *argv[])
             test_x[(i*Ntest_Angle+j)*8+4] = 0;
         }
     }
-    test_Xbar.row(0)=mean(X.row(0))*ones(1,Ntest);
-    test_Xbar.row(1)=mean(X.row(1))*ones(1,Ntest);
-    test_Xbar.row(2)=mean(X.row(2))*ones(1,Ntest);
-    test_Xbar.row(3)=mean(X.row(3))*ones(1,Ntest);
-    test_X=test_X-test_Xbar;
+//    test_Xbar.row(0)=mean(X.row(0))*ones(1,Ntest);
+//    test_Xbar.row(1)=mean(X.row(1))*ones(1,Ntest);
+//    test_Xbar.row(2)=mean(X.row(2))*ones(1,Ntest);
+//    test_Xbar.row(3)=mean(X.row(3))*ones(1,Ntest);
+//    test_X=test_X-test_Xbar;
 
 
     //Main Loop
@@ -262,7 +262,7 @@ int main(int argc, char *argv[])
             fout1<<j<<" "<<count<<" "<<sigx2(0)<<" "<<sigxp2(0)<<" "<<sigz2(0)<<" "<<sigzp2(0)<<" "<<e1(0)<<" "<<e2(0)<<" "<<sigxp(0)<<" "<<sigzp(0)<<" "<<endl; //add (0) to avoid newline
         }
         if(fout2.is_open()){
-            for (int i=0; i < 200; i++) {
+            for (int i=0; i < Ntest; i++) {
                 test_x[i*8+6] = betax0*test_x[i*8+1]+alfax0*test_x[i*8+0];
                 test_x[i*8+7] = betaz0*test_x[i*8+3]+alfaz0*test_x[i*8+2];
             }
