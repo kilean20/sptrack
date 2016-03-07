@@ -99,7 +99,7 @@ int main(int argc, char *argv[])
     line_def(FODO);
     //need these for paticle initialization
     //load_2Q(FODO,Qsetting0);
-    Fit_Tune(FODO, 0.36, 0.32, "QF", "QD");
+    //Fit_Tune(FODO, 0.36, 0.32, "QF", "QD");
     Cal_Twiss(FODO,0.0);//it is necessary for the 0th turn
     double betax0, betaz0, alfax0, alfaz0;
     betax0 = FODO.Cell[0]->Beta1;
