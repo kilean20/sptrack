@@ -215,7 +215,7 @@ int main(int argc, char *argv[])
 
 
     // test particles for poincare surface
-    const int Ntest_action=40, Ntest_Angle=5, Ntest=Ntest_action*Ntest_Angle;
+    const int Ntest_action=40, Ntest_Angle=10, Ntest=Ntest_action*Ntest_Angle;
     mat test_Xbar=zeros(8,Ntest);
     double *test_x = new double[Ntest*8];
     mat test_X(test_x, 8, Ntest, false);
