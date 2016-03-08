@@ -99,7 +99,7 @@ int main(int argc, char *argv[])
     line_def(FODO);
     //need these for paticle initialization
     //load_2Q(FODO,Qsetting0);
-    //Fit_Tune(FODO, 122.0/360.0, 0.32, "QF", "QD");
+    //Fit_Tune(FODO, 0.36, 0.32, "QF", "QD");
     Cal_Twiss(FODO,0.0);//it is necessary for the 0th turn
     double betax0, betaz0, alfax0, alfaz0;
     betax0 = FODO.Cell[0]->Beta1;
@@ -151,7 +151,7 @@ int main(int argc, char *argv[])
     unsigned int *lost_turn = new unsigned int[N_particle];
     unsigned int *lost_post = new unsigned int[N_particle];
     double phix,phiz,Ax,Az;
-    for (unsigned int i=0; i < N_particle; i++) {
+    for (unsigned int i=200; i < N_particle; i++) {
         phix=unifRand(-M_PI,M_PI);
         Ax=sqrt(betax0*epsx)*trunc_xgaussRand(4);
         x[i*8+0] = Ax*cos(phix);
@@ -162,6 +162,19 @@ int main(int argc, char *argv[])
         x[i*8+7] = Az*sin(phiz); //Pz
         x[i*8+4] = 0;
         x[i*8+5] = 0;
+    }
+    int dummyAx=0, dummyPhi=0;
+    for (unsigned int i=0; i < 200; i++) {
+        if(dummyPhi%5==0){dummyAx++;}
+        phix=M_PI*(double)dummyPhi/5.0;
+        Ax=sqrt(betax0*epsx)*0.15*dummyAx;
+        x[i*8+0] = Ax*cos(phix);
+        x[i*8+6] = Ax*sin(phix); //Px
+        x[i*8+2] = 0;
+        x[i*8+7] = 0;
+        x[i*8+4] = 0;
+        x[i*8+5] = 0;
+        dummyPhi++;
     }
     for (unsigned int i=0; i < N_particle; i++) {
         x[i*8+1] = (x[i*8+6]-alfax0*x[i*8+0])/betax0;
@@ -214,34 +227,6 @@ int main(int argc, char *argv[])
     }
 
 
-    // test particles for poincare surface
-    const int Ntest_action=40, Ntest_Angle=5, Ntest=Ntest_action*Ntest_Angle;
-    mat test_Xbar=zeros(8,Ntest);
-    double *test_x = new double[Ntest*8];
-    mat test_X(test_x, 8, Ntest, false);
-    for (unsigned int i=0; i<Ntest_action; i++) {
-        for (unsigned int j=0; j <Ntest_Angle; j++) {
-            phix=2.0*j*PI/(double)Ntest_Angle;
-            Ax=sqrt(betax0*epsx)*0.15*(i+1);
-            test_x[(i*Ntest_Angle+j)*8+0] = Ax*cos(phix);
-            test_x[(i*Ntest_Angle+j)*8+6] = Ax*sin(phix); //Px
-            test_x[(i*Ntest_Angle+j)*8+2] = 0;
-            test_x[(i*Ntest_Angle+j)*8+7] = 0;
-            test_x[(i*Ntest_Angle+j)*8+4] = 0;
-            test_x[(i*Ntest_Angle+j)*8+5] = 0;
-        }
-    }
-    for (unsigned int i=0; i < Ntest; i++) {
-        test_x[i*8+1] = (test_x[i*8+6]-alfax0*test_x[i*8+0])/betax0;
-        test_x[i*8+3] = (test_x[i*8+7]-alfaz0*test_x[i*8+2])/betaz0;
-    }
-//    test_Xbar.row(0)=mean(X.row(0))*ones(1,Ntest);
-//    test_Xbar.row(1)=mean(X.row(1))*ones(1,Ntest);
-//    test_Xbar.row(2)=mean(X.row(2))*ones(1,Ntest);
-//    test_Xbar.row(3)=mean(X.row(3))*ones(1,Ntest);
-//    test_X=test_X-test_Xbar;
-
-
     //Main Loop
     for(unsigned int j=0;j<=N_TURN;j++) {
         //update statistics data for every turn
@@ -266,13 +251,13 @@ int main(int argc, char *argv[])
             fout1<<j<<" "<<count<<" "<<sigx2(0)<<" "<<sigxp2(0)<<" "<<sigz2(0)<<" "<<sigzp2(0)<<" "<<e1(0)<<" "<<e2(0)<<" "<<sigxp(0)<<" "<<sigzp(0)<<" "<<endl; //add (0) to avoid newline
         }
         if(fout2.is_open()){
-            for (int i=0; i < Ntest; i++) {
-                test_x[i*8+6] = betax0*test_x[i*8+1]+alfax0*test_x[i*8+0];
-                test_x[i*8+7] = betaz0*test_x[i*8+3]+alfaz0*test_x[i*8+2];
+            for (int i=0; i < N_particle; i++) {
+                x[i*8+6] = betax0*x[i*8+1]+alfax0*x[i*8+0];
+                x[i*8+7] = betaz0*x[i*8+3]+alfaz0*x[i*8+2];
             }
-            for (unsigned int i=0; i < Ntest; i++) {
+            for (unsigned int i=0; i < 80; i++) {
 		if(j>50)
-                fout2<<test_x[i*8+0]<<" "<<test_x[i*8+1]<<" "<<test_x[i*8+6]<<endl;
+                fout2<<x[i*8+0]<<" "<<x[i*8+1]<<" "<<x[i*8+6]<<endl;
             }
             //			fout2<<"#n="<<j<<'F'<<endl;
             //			fout2<<trans(X.cols(live_index))<<endl<<endl;
@@ -285,7 +270,6 @@ int main(int argc, char *argv[])
         count=0;	//counting number of survival particles
         countk=0;	//count sp_kickers number, for writing envelope at every six sp_kickers
         for(unsigned int k=0;k<FODO.Ncell;k++) { //for every element in one turn
-            for (unsigned int i=0; i < Ntest; i++) { FODO.Cell[k]->Pass(test_x+i*8);} // test
             for (unsigned int i=0; i < N_particle; i++) { //for every particles
                 if(stable[i]!=0){
                     FODO.Cell[k]->Pass(x+i*8);
@@ -361,21 +345,6 @@ int main(int argc, char *argv[])
                         x[i*8+1]+=fscx;
                         x[i*8+3]+=fscz;
                     }
-                }
-                //test particle SC kick
-                test_Xbar.row(0)=mean(X.row(0))*ones(1,Ntest);
-                test_Xbar.row(1)=mean(X.row(1))*ones(1,Ntest);
-                test_Xbar.row(2)=mean(X.row(2))*ones(1,Ntest);
-                test_Xbar.row(3)=mean(X.row(3))*ones(1,Ntest);
-                test_X=test_X-test_Xbar;
-                for (unsigned int i=0; i < Ntest; i++) { //for every test particles
-                        xold=test_x[i*8+0];
-                        zold=test_x[i*8+2];
-                        if (FODO.Cell[k]->NAME==string("SPKICK")){
-                            Fsc2(Ksc1[j],0.5,sx2,sz2,xold,zold,fscx,fscz);
-                        }
-                        test_x[i*8+1]+=fscx;
-                        test_x[i*8+3]+=fscz; 
                 }
 
                 if(fout4.is_open()){
