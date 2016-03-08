@@ -170,10 +170,8 @@ int main(int argc, char *argv[])
         Ax=sqrt(betax0*epsx)*0.15*dummyAx;
         x[i*8+0] = Ax*cos(phix);
         x[i*8+6] = Ax*sin(phix); //Px
-        phiz=unifRand(-M_PI,M_PI);
-        Az=sqrt(betaz0*epsz)*trunc_xgaussRand(4);
-        x[i*8+2] = Az*cos(phiz);
-        x[i*8+7] = Az*sin(phiz); //Pz
+        x[i*8+2] = 0;
+        x[i*8+7] = 0;
         x[i*8+4] = 0;
         x[i*8+5] = 0;
         dummyPhi++;

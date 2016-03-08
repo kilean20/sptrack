@@ -225,11 +225,15 @@ int main(int argc, char *argv[])
             Ax=sqrt(betax0*epsx)*0.15*(i+1);
             test_x[(i*Ntest_Angle+j)*8+0] = Ax*cos(phix);
             test_x[(i*Ntest_Angle+j)*8+6] = Ax*sin(phix); //Px
-            test_x[(i*Ntest_Angle+j)*8+1] = (test_x[(i*Ntest_Angle+j)*8+6]-alfax0*test_x[(i*Ntest_Angle+j)*8+0])/betax0;
             test_x[(i*Ntest_Angle+j)*8+2] = 0;
-            test_x[(i*Ntest_Angle+j)*8+3] = 0;
+            test_x[(i*Ntest_Angle+j)*8+7] = 0;
             test_x[(i*Ntest_Angle+j)*8+4] = 0;
+            test_x[(i*Ntest_Angle+j)*8+5] = 0;
         }
+    }
+    for (unsigned int i=0; i < Ntest; i++) {
+        test_x[i*8+1] = (test_x[i*8+6]-alfax0*test_x[i*8+0])/betax0;
+        test_x[i*8+3] = (test_x[i*8+7]-alfaz0*test_x[i*8+2])/betaz0;
     }
 //    test_Xbar.row(0)=mean(X.row(0))*ones(1,Ntest);
 //    test_Xbar.row(1)=mean(X.row(1))*ones(1,Ntest);
