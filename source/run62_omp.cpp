@@ -241,9 +241,9 @@ int main(int argc, char *argv[])
 //    test_Xbar.row(2)=mean(X.row(2))*ones(1,Ntest);
 //    test_Xbar.row(3)=mean(X.row(3))*ones(1,Ntest);
 //    test_X=test_X-test_Xbar;
-
+int i,j,l;
     //Main Loop
-    for(unsigned int j=0;j<=N_TURN;j++) {
+    for(j=0;j<=N_TURN;j++) {
         //update statistics data for every turn
         live_index = find(STABLE != 0);
         sigx2  = cov(X(row0, live_index),1);
@@ -285,12 +285,12 @@ int main(int argc, char *argv[])
         count=0;	//counting number of survival particles
         countk=0;	//count sp_kickers number, for writing envelope at every six sp_kickers
         for(unsigned int k=0;k<FODO.Ncell;k++) { //for every element in one turn
-            //#pragma omp parallel
-	    //{  
-            //#pragma omp parallel for 
-            for (unsigned int i=0; i < Ntest; i++) { FODO.Cell[k]->Pass(test_x+i*8);} // test
-            //#pragma omp parallel for 
-                for (unsigned int i=0; i < N_particle; i++) { //for every particles
+            #pragma omp parallel
+            {
+            #pragma omp parallel for nowait
+            for (l=0; l < Ntest; l++) { FODO.Cell[k]->Pass(test_x+l*8);} // test
+            #pragma omp parallel for
+                for (i=0; i < N_particle; i++) { //for every particles
                     if(stable[i]!=0){
                         FODO.Cell[k]->Pass(x+i*8);
                         if( abs(x[i*8+0]) > FODO.Cell[k]->APx or abs(x[i*8+2]) > FODO.Cell[k]->APy or isnan(x[i*8+0])==1){
@@ -299,7 +299,7 @@ int main(int argc, char *argv[])
                         }
                     }
                 }
-            //}
+            }
             live_index = find(STABLE != 0);
             count = live_index.size();
             Ksc1[j]=Ksc[j]*(double)count/N_particle;
