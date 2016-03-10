@@ -242,7 +242,6 @@ int main(int argc, char *argv[])
 //    test_Xbar.row(3)=mean(X.row(3))*ones(1,Ntest);
 //    test_X=test_X-test_Xbar;
 
-
     //Main Loop
     for(unsigned int j=0;j<=N_TURN;j++) {
         //update statistics data for every turn
@@ -286,9 +285,11 @@ int main(int argc, char *argv[])
         count=0;	//counting number of survival particles
         countk=0;	//count sp_kickers number, for writing envelope at every six sp_kickers
         for(unsigned int k=0;k<FODO.Ncell;k++) { //for every element in one turn
+            //#pragma omp parallel
+	    //{  
+            //#pragma omp parallel for 
             for (unsigned int i=0; i < Ntest; i++) { FODO.Cell[k]->Pass(test_x+i*8);} // test
-            #pragma omp parallel private(i)
-            {
+            //#pragma omp parallel for 
                 for (unsigned int i=0; i < N_particle; i++) { //for every particles
                     if(stable[i]!=0){
                         FODO.Cell[k]->Pass(x+i*8);
@@ -298,7 +299,7 @@ int main(int argc, char *argv[])
                         }
                     }
                 }
-            }
+            //}
             live_index = find(STABLE != 0);
             count = live_index.size();
             Ksc1[j]=Ksc[j]*(double)count/N_particle;
@@ -355,8 +356,7 @@ int main(int argc, char *argv[])
                 sx2=betax*aveg_e1;//sx2=sigx2(0);
                 sz2=betaz*aveg_e2;//sz2=sigz2(0);
                 //SC kick
-                #pragma omp parallel private(i)
-                {
+                //#pragma omp parallel for 
                     for (unsigned int i=0; i < N_particle; i++) { //for every particles
                         if(stable[i]!=0){
                             xold=x[i*8+0];
@@ -368,7 +368,6 @@ int main(int argc, char *argv[])
                             x[i*8+3]+=fscz;
                         }
                     }
-                }
                 //test particle SC kick
                 test_Xbar.row(0)=mean(X.row(0))*ones(1,Ntest);
                 test_Xbar.row(1)=mean(X.row(1))*ones(1,Ntest);

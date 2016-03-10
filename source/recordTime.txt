@@ -1,0 +1,9 @@
+#pass method parallelized
+real	12m42.114s
+user	197m59.835s
+sys	0m22.120s
+
+#serial
+real	11m8.231s
+user	10m49.770s
+sys	0m17.283s
