@@ -18,7 +18,7 @@ BOOST_INCLUDE=-I/home/hchao/usr/local/include
 BOOST_LIBRARY=-L/home/hchao/usr/local/lib 
 
 #all: nlopt2 loadQ_track Qerrgen
-all: run62_omp
+all: run62
 
 #basic math, random number, distribution generation
 myroutine.o: myroutine.cpp myroutine.h
@@ -32,10 +32,10 @@ myroutine2.o: myroutine2.cpp myroutine2.h myroutine.cpp myroutine.h
 Faddeeva.o: Faddeeva.cc Faddeeva.hh
 	$(CC) $(OPTS) -c $<
 
-run62_omp.o: run62_omp.cpp 
-	$(CC) $(OPTS) -fopenmp -c $< $(SIMTRACK_INC)
-run62_omp: run62_omp.o FODO4.o myroutine.o myroutine1.o myroutine2.o Faddeeva.o simtrack/libsimtrack$(ARCH).a
-	$(CC) -fopenmp $^ $(SIMTRACK_INC) $(SIMTRACK_LIB) $(ARMA_INCLUDE) $(ARMA_LIBRARY) -o $@
+loadQ_track.o: loadQ_track.cpp 
+	$(CC) $(OPTS) -c $< $(SIMTRACK_INC)
+loadQ_track: loadQ_track.o FODO4.o myroutine.o myroutine1.o myroutine2.o Faddeeva.o simtrack/libsimtrack$(ARCH).a
+	$(CC) $^ $(SIMTRACK_INC) $(SIMTRACK_LIB) $(ARMA_INCLUDE) $(ARMA_LIBRARY) -o $@
 
 #Qerrgen: Qerrgen.cpp FODO4.o myroutine.o myroutine2.o simtrack/libsimtrack$(ARCH).a
 #	$(CC) $^ $(SIMTRACK_INC) $(SIMTRACK_LIB) $(ARMA_INCLUDE) $(ARMA_LIBRARY) -o $@
