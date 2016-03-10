@@ -287,9 +287,9 @@ int i,j,l;
         for(unsigned int k=0;k<FODO.Ncell;k++) { //for every element in one turn
             #pragma omp parallel
             {
-            #pragma omp parallel for nowait
+            #pragma omp for nowait
             for (l=0; l < Ntest; l++) { FODO.Cell[k]->Pass(test_x+l*8);} // test
-            #pragma omp parallel for
+            #pragma omp for
                 for (i=0; i < N_particle; i++) { //for every particles
                     if(stable[i]!=0){
                         FODO.Cell[k]->Pass(x+i*8);
